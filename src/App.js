@@ -1,9 +1,15 @@
 import React from 'react';
 import './App.css';
+import ContextProvider from './helpers/Provider';
+import Table from './pages/Table';
 
 function App() {
   return (
-    <span>Hello, Apssp!</span>
+    <div>
+      <ContextProvider>
+        <Table />
+      </ContextProvider>
+    </div>
   );
 }
 
