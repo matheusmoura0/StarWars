@@ -7,6 +7,7 @@ function ContextProvider({ children }) {
   const [data, setData] = useState();
   const [charactereFilter, setChacactereFilter] = useState();
   const [valuesFilter, setValusFilter] = useState();
+  const [drop, setDrop] = useState();
 
   useEffect(() => {
     FetchApi().then((planets) => setData(planets));
@@ -20,7 +21,9 @@ function ContextProvider({ children }) {
           valuesFilter,
           setValusFilter,
           setChacactereFilter,
-          setData } }
+          setData,
+          drop,
+          setDrop } }
       >
         {children}
       </MyContext.Provider>

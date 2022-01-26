@@ -2,14 +2,13 @@ import React, { useContext, useState } from 'react';
 import MyContext from '../helpers/Context';
 
 function Table() {
-  const { data, setData } = useContext(MyContext);
-  const [q, setQ] = useState('');
-
   const dropdown = [
     'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
   ];
-
-  const [column, Setcolumn] = useState('population');
+  const { data, setData } = useContext(MyContext);
+  const [drop, setDrop] = useState(dropdown);
+  const [q, setQ] = useState('');
+  const [column, setColumn] = useState('population');
   const [comparison, setComparison] = useState('maior que');
   const [valueF, setValueF] = useState(0);
 
@@ -30,6 +29,10 @@ function Table() {
       filtered = data;
     }
     setData(filtered);
+    const filterDropd = drop.filter((x) => x !== column);
+    setDrop(filterDropd);
+    setColumn(drop[0]);
+    console.log(drop);
   };
 
   if (!data) return <p> loading... </p>;
@@ -40,11 +43,11 @@ function Table() {
       >
         Coluna:
         <select
-          onChange={ (e) => Setcolumn(e.target.value) }
+          onChange={ (e) => setColumn(e.target.value) }
           data-testid="column-filter"
           htmlFor="dropdown"
         >
-          {dropdown.map((x, i) => (
+          {drop.map((x, i) => (
             <option
               key={ i }
             >
