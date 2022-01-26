@@ -5,6 +5,8 @@ import MyContext from './Context';
 
 function ContextProvider({ children }) {
   const [data, setData] = useState();
+  const [charactereFilter, setChacactereFilter] = useState();
+  const [valuesFilter, setValusFilter] = useState();
 
   useEffect(() => {
     FetchApi().then((planets) => setData(planets));
@@ -13,7 +15,12 @@ function ContextProvider({ children }) {
   return (
     <main>
       <MyContext.Provider
-        value={ data }
+        value={ { data,
+          charactereFilter,
+          valuesFilter,
+          setValusFilter,
+          setChacactereFilter,
+          setData } }
       >
         {children}
       </MyContext.Provider>

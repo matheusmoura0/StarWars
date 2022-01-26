@@ -2,20 +2,92 @@ import React, { useContext, useState } from 'react';
 import MyContext from '../helpers/Context';
 
 function Table() {
-  const data = useContext(MyContext);
+  const { data, setData } = useContext(MyContext);
   const [q, setQ] = useState('');
+
+  const dropdown = [
+    'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
+  ];
+
+  const [column, Setcolumn] = useState('population');
+  const [comparison, setComparison] = useState('maior que');
+  const [valueF, setValueF] = useState(0);
+
+  const filterFunction = () => {
+    const number = Number(valueF);
+    let filtered = data;
+    switch (comparison) {
+    case 'maior que':
+      filtered = data.filter((x) => Number(x[column]) > number);
+      break;
+    case 'menor que':
+      filtered = data.filter((x) => Number(x[column]) < number);
+      break;
+    case 'igual a':
+      filtered = data.filter((x) => Number(x[column]) === number);
+      break;
+    default:
+      filtered = data;
+    }
+    setData(filtered);
+  };
+
   if (!data) return <p> loading... </p>;
-  console.log(data);
-  // ajuda do israel :B
   return (
     <div>
+      <label
+        htmlFor="dropdown"
+      >
+        Coluna:
+        <select
+          onChange={ (e) => Setcolumn(e.target.value) }
+          data-testid="column-filter"
+          htmlFor="dropdown"
+        >
+          {dropdown.map((x, i) => (
+            <option
+              key={ i }
+            >
+              { x }
+            </option>))}
+        </select>
+      </label>
+      <label
+        htmlFor="comparison"
+      >
+        Operador:
+        <select
+          onChange={ (e) => setComparison(e.target.value) }
+          data-testid="comparison-filter"
+          htmlFor="comparison"
+        >
+          <option value="maior que">maior que</option>
+          <option value="menor que">menor que</option>
+          <option value="igual a">igual a</option>
+        </select>
+
+      </label>
+      <input
+        value={ valueF }
+        onChange={ (e) => setValueF(e.target.value) }
+        data-testid="value-filter"
+        type="number"
+      />
+
       <input
         data-testid="name-filter"
         onChange={ (e) => setQ(e.target.value) }
         value={ q }
         type="text"
-        placeholder="filtrar"
       />
+      <button
+        onClick={ filterFunction }
+        type="button"
+        data-testid="button-filter"
+      >
+        Filtrar
+      </button>
+
       <table>
         <thead>
           <tr>
@@ -35,7 +107,7 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {data.length > 0 && data
+          {data
             .filter((x) => (q === ''
               ? true
               : x.name.toLowerCase().includes(q.toLowerCase())))
